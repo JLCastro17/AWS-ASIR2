@@ -1,0 +1,21 @@
+glusterd=$(systemctl status glusterd | egrep 'Active: active') 
+
+if [ "$glusterd" ];
+then
+	DESCRIPTION="GlusterFS is working correctly"
+	RESULTS='ok'	    
+else
+	DESCRIPTION="GlusterFS isn't working correctly"
+	RESULTS='failed'
+fi
+
+case "${RESULTS}" in
+'ok')
+        echo "OK- ${DESCRIPTION}"
+        exit 0
+        ;;
+'failed')
+        echo "CRITICAL- ${DESCRIPTION}"
+        exit 2
+        ;;
+esac

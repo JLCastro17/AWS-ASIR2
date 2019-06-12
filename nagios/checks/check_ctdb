@@ -1,0 +1,43 @@
+nodo1=$(sudo ctdb ip | egrep '^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]* 0$')
+nodo2=$(sudo ctdb ip | egrep '^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]* 1$')
+nodox=$(sudo ctdb ip | egrep '^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]* -1$')
+ 
+if [ "$nodo1" ];
+then
+        DESCRIPTION="IP en nodo 1"
+        RESULTS='ok'
+elif [ "$nodo2" ];
+then
+        DESCRIPTION="IP en nodo 2"
+        RESULTS='warning'
+elif [ "$nodox" ];
+then
+        DESCRIPTION="IP no asignada"
+        RESULTS='failed'
+elif [ -z "$nodox" ];
+then
+        DESCRIPTION="IP no encontrada"
+        RESULTS='failed'
+else
+        DESCRIPTION="Ha ocurrido algo inesperado"
+        RESULTS='unknown'
+fi
+ 
+case "${RESULTS}" in
+'ok')
+        echo "OK- ${DESCRIPTION}"
+        exit 0
+        ;;
+'warning')
+        echo "WARNING- ${DESCRIPTION}"
+        exit 1
+        ;;
+'failed')
+        echo "CRITICAL- ${DESCRIPTION}"
+        exit 2
+        ;;
+'unknown')
+        echo "UNKNOWN- ${DESCRIPTION}"
+        exit 3
+        ;;
+esac

@@ -1,0 +1,21 @@
+logstash=$(systemctl status logstash | egrep 'Active: active') 
+
+if [ "$logstash" ];
+then
+	DESCRIPTION="Logstash is working correctly"
+	RESULTS='ok'	    
+else
+	DESCRIPTION="Logstash isn't working correctly"
+	RESULTS='failed'
+fi
+
+case "${RESULTS}" in
+'ok')
+        echo "OK- ${DESCRIPTION}"
+        exit 0
+        ;;
+'failed')
+        echo "CRITICAL- ${DESCRIPTION}"
+        exit 2
+        ;;
+esac

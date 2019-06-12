@@ -1,0 +1,21 @@
+filebeat=$(systemctl status filebeat | egrep 'Active: active') 
+
+if [ "$filebeat" ];
+then
+	DESCRIPTION="Filebeat is working correctly"
+	RESULTS='ok'	    
+else
+	DESCRIPTION="Filebeat isn't working correctly"
+	RESULTS='failed'
+fi
+
+case "${RESULTS}" in
+'ok')
+        echo "OK- ${DESCRIPTION}"
+        exit 0
+        ;;
+'failed')
+        echo "CRITICAL- ${DESCRIPTION}"
+        exit 2
+        ;;
+esac
